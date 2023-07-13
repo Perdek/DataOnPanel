@@ -8,7 +8,7 @@ namespace Presentation.InformationPanel
         #region MEMBERS
 
         [SerializeField] private InformationPanelView _view;
-        private InformationPanelModel _model;
+        [SerializeField] private InformationPanelModel _model;
 
         #endregion
 
@@ -16,6 +16,7 @@ namespace Presentation.InformationPanel
 
         private void Awake()
         {
+            Initialize();
             RefreshView();
         }
 
@@ -23,9 +24,14 @@ namespace Presentation.InformationPanel
 
         #region METHODS
 
+        private void Initialize()
+        {
+            _view.Initialize();
+        }
+
         private void RefreshView()
         {
-            _view.Refresh(_model.GetDataForPanel());
+            //_view.Refresh(_model.GetDataForPanel());
         }
 
         #endregion
