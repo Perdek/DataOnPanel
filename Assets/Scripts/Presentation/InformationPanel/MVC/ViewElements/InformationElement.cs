@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Presentation.InformationElements
+namespace Presentation.InformationPanel.MVC.ViewElements
 {
     public class InformationElement : MonoBehaviour
     {

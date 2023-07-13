@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Presentation.InformationPanel
+namespace Presentation.InformationPanel.MVC.ViewElements
 {
     [Serializable]
     public class LoadingPanel
