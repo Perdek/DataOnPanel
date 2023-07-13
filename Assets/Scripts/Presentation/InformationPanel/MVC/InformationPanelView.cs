@@ -1,5 +1,7 @@
 using System;
-using DG.Tweening;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Presentation.InformationPanel.MVC.ViewElements;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -17,6 +19,7 @@ namespace Presentation.InformationPanel
         [SerializeField] private Button _nextButton;
 
         [SerializeField] private LoadingPanel _loadingPanel;
+        [SerializeField] private CollectionPanel _collectionPanel;
 
         #endregion
         
@@ -27,11 +30,6 @@ namespace Presentation.InformationPanel
             InitializeLoadingAnimation();
         }
 
-        public void Refresh(object getDataForPanel)
-        {
-            
-        }
-
         public void AddListenerToPreviousButton(UnityAction onClick)
         {
             _previousButton.onClick.AddListener(onClick);
@@ -40,6 +38,11 @@ namespace Presentation.InformationPanel
         public void AddListenerToNextButton(UnityAction onClick)
         {
             _nextButton.onClick.AddListener(onClick);
+        }
+        
+        public void Refresh(IList<DataItem> data)
+        {
+            _collectionPanel.Refresh(data);
         }
 
         private void InitializeLoadingAnimation()

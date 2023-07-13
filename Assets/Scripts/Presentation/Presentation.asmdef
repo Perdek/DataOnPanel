@@ -1,3 +1,4 @@
 {
-	"name": "Presentation"
+	"name": "Presentation",
+	"references":[ "GUID:99182afa38bffb04e957bc65baf445fe", "GUID:5715c4f5877a211409980fc59796f997" ]
 }
