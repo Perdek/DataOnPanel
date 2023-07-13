@@ -40,9 +40,24 @@ namespace Presentation.InformationPanel
             _nextButton.onClick.AddListener(onClick);
         }
         
-        public void Refresh(IList<DataItem> data)
+        public void RefreshViewOnLoadedData(IList<DataItem> data)
         {
+            _loadingPanel.TurnOffLoadingAnimation();
             _collectionPanel.Refresh(data);
+        }
+
+        public void RefreshStartUpView()
+        {
+            _loadingPanel.TurnOnLoadingAnimation();
+
+            _nextButton.interactable = false;
+            _previousButton.interactable = false;
+        }
+        
+        public void RefreshButtons((bool prevPageIsPossible, bool nextPageIsPossible) changingPageIsPossible)
+        {
+            _nextButton.interactable = changingPageIsPossible.nextPageIsPossible;
+            _previousButton.interactable = changingPageIsPossible.prevPageIsPossible;
         }
 
         private void InitializeLoadingAnimation()

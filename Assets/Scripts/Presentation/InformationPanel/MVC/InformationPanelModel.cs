@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,9 +12,12 @@ namespace Presentation.InformationPanel
         #region MEMBERS
 
         private IDataServer _dataServer;
-        private IList<DataItem> _availableDataCollection = new List<DataItem>();
+        private List<DataItem> _availableDataCollection = new List<DataItem>();
         private int _availableDataCount;
         private int _pageIndex;
+        private int _firstVisibleCollectionElementIndex;
+        
+        private const int ELEMENTS_COUNT_ON_PAGE = 5;
 
         #endregion
 
@@ -26,7 +30,10 @@ namespace Presentation.InformationPanel
 
         public async Task RequestData(CancellationToken cancellationToken)
         {
-            _availableDataCollection = await _dataServer.RequestData(_pageIndex, _availableDataCount, cancellationToken);
+            //prepare for cancellation token
+            var requestedData = await _dataServer.RequestData(_pageIndex, _availableDataCount, cancellationToken);
+
+            _availableDataCollection = requestedData.ToList();
         }
 
         public async Task RefreshDataAvailableCount(CancellationToken cancellationToken)
@@ -34,19 +41,39 @@ namespace Presentation.InformationPanel
             _availableDataCount = await _dataServer.DataAvailable(cancellationToken);
         }
         
-        public IList<DataItem> GetDataSinglePage()
+        public IList<DataItem> GetDataCurrentPage()
         {
-            throw new NotImplementedException();
+            return _availableDataCollection.GetRange(_firstVisibleCollectionElementIndex, ELEMENTS_COUNT_ON_PAGE);
         }
 
         public void NextPage()
         {
+            if ((_pageIndex + 1) * ELEMENTS_COUNT_ON_PAGE > _availableDataCount)
+            {
+                return;
+            }
+            
             _pageIndex++;
+            _firstVisibleCollectionElementIndex += ELEMENTS_COUNT_ON_PAGE;
         }
 
         public void PrevPage()
         {
+            if (_pageIndex == 0)
+            {
+                return;
+            }
+            
             _pageIndex--;
+            _firstVisibleCollectionElementIndex -= ELEMENTS_COUNT_ON_PAGE;
+        }
+
+        public (bool prevPageIsPossible, bool nextPageIsPossible) ChangingPageIsPossible()
+        {
+            bool nextPageIsPossible = (_pageIndex + 1) * ELEMENTS_COUNT_ON_PAGE < _availableDataCount;
+            bool prevPageIsPossible = _pageIndex > 0;
+
+            return (prevPageIsPossible, nextPageIsPossible);
         }
 
         #endregion

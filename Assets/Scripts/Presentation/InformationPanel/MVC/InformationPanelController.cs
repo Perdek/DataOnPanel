@@ -28,7 +28,7 @@ namespace Presentation.InformationPanel
         private async void Start()
         {
             await RefreshModel();
-            RefreshView();
+            RefreshPageView();
         }
 
         #endregion
@@ -46,6 +46,23 @@ namespace Presentation.InformationPanel
             _cancellationTokenForDataCountRequest = new CancellationToken();
             _cancellationTokenForDataRequest = new CancellationToken();
             _view.Initialize();
+
+            _view.RefreshStartUpView();
+            
+            _view.AddListenerToNextButton(NextPage);
+            _view.AddListenerToPreviousButton(PrevPage);
+        }
+
+        private void NextPage()
+        {
+            _model.NextPage();
+            RefreshPageView();
+        }
+
+        private void PrevPage()
+        {
+            _model.PrevPage();
+            RefreshPageView();
         }
 
         private async Task RefreshModel()
@@ -54,9 +71,10 @@ namespace Presentation.InformationPanel
             await _model.RequestData(_cancellationTokenForDataRequest);
         }
 
-        private void RefreshView()
+        private void RefreshPageView()
         {
-            _view.Refresh(_model.GetDataSinglePage());
+            _view.RefreshViewOnLoadedData(_model.GetDataCurrentPage());
+            _view.RefreshButtons(_model.ChangingPageIsPossible());
         }
 
         #endregion

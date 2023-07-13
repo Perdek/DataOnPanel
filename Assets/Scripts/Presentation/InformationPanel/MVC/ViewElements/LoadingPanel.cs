@@ -22,6 +22,16 @@ namespace Presentation.InformationPanel.MVC.ViewElements
             _loadingGameObject.transform.DORotate(new Vector3(0, 0, 360),
                 _rotationTime).SetRelative(true).SetEase(Ease.Linear).SetLoops(-1);
         }
+        
+        public void TurnOnLoadingAnimation()
+        {
+            _loadingGameObject.SetActive(true);
+        }
+        
+        public void TurnOffLoadingAnimation()
+        {
+            _loadingGameObject.SetActive(false);
+        }
 
         #endregion
     }
