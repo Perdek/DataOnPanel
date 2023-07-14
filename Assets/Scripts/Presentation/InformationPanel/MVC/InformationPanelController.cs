@@ -75,7 +75,7 @@ namespace Presentation.InformationPanel
 
         private void RefreshPageView()
         {
-            _view.RefreshViewOnLoadedData(_model.GetDataCurrentPage());
+            _view.RefreshViewOnLoadedData(_model.GetDataCurrentPage(), _model.GetStartIndex());
             _view.RefreshButtons(_model.ChangingPageIsPossible());
         }
 

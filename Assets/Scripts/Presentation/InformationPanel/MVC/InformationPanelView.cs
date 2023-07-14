@@ -45,10 +45,10 @@ namespace Presentation.InformationPanel
             _nextButton.onClick.AddListener(onClick);
         }
         
-        public void RefreshViewOnLoadedData(IList<DataItem> data)
+        public void RefreshViewOnLoadedData(IList<DataItem> data, int startIndex)
         {
             _loadingPanel.TurnOffLoadingAnimation();
-            _collectionPanel.Refresh(data);
+            _collectionPanel.Refresh(data, startIndex);
         }
 
         public void RefreshStartUpView()

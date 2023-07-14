@@ -77,6 +77,11 @@ namespace Presentation.InformationPanel
             return (prevPageIsPossible, nextPageIsPossible);
         }
 
+        public int GetStartIndex()
+        {
+            return _firstVisibleCollectionElementIndex;
+        }
+
         #endregion
     }
 }

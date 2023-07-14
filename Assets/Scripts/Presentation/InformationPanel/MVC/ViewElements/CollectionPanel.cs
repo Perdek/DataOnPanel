@@ -23,10 +23,10 @@ namespace Presentation.InformationPanel.MVC.ViewElements
             _informationElementFactory = informationElementFactory;
         }
 
-        public void Refresh(IList<DataItem> data)
+        public void Refresh(IList<DataItem> data, int startIndex)
         {
             ClearCollection();
-            FillCollection(data);
+            FillCollection(data, startIndex);
         }
 
         private void ClearCollection()
@@ -43,11 +43,11 @@ namespace Presentation.InformationPanel.MVC.ViewElements
             _informationElements.RemoveAt(index);
         }
 
-        private void FillCollection(IList<DataItem> data)
+        private void FillCollection(IList<DataItem> data, int startIndex)
         {
             for (int i = 0; i < data.Count; i++)
             {
-                AddCollectionElement(data[i], i);   
+                AddCollectionElement(data[i], startIndex + i);   
             }
         }
 
