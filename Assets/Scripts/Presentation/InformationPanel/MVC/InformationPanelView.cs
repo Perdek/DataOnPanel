@@ -25,6 +25,11 @@ namespace Presentation.InformationPanel
         
         #region METHODS
 
+        public void InjectDependencies(InformationElement.Factory informationElementFactory)
+        {
+            _collectionPanel.InjectDependencies(informationElementFactory);
+        }
+
         public void Initialize()
         {
             InitializeLoadingAnimation();

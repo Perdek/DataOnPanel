@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Presentation.InformationPanel.MVC.ViewElements;
 using UnityEngine;
 using Zenject;
 
@@ -34,11 +35,12 @@ namespace Presentation.InformationPanel
         #endregion
 
         #region METHODS
-
+        
         [Inject]
-        private void InjectDependencies(IDataServer dataServer)
+        private void InjectDependencies(IDataServer dataServer, InformationElement.Factory informationElementFactory)
         {
             _model.InjectDependencies(dataServer);
+            _view.InjectDependencies(informationElementFactory);
         }
 
         private void Initialize()

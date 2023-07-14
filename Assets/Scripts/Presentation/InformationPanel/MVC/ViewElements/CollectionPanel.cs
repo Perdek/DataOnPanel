@@ -10,13 +10,18 @@ namespace Presentation.InformationPanel.MVC.ViewElements
         #region MEMBERS
 
         [SerializeField] private Transform _collectionElementParent;
-        [SerializeField] private InformationElement _collectionElementPrefab;
 
         private List<InformationElement> _informationElements = new List<InformationElement>();
+        private InformationElement.Factory _informationElementFactory;
 
         #endregion
 
         #region METHODS
+
+        public void InjectDependencies(InformationElement.Factory informationElementFactory)
+        {
+            _informationElementFactory = informationElementFactory;
+        }
 
         public void Refresh(IList<DataItem> data)
         {
@@ -42,13 +47,16 @@ namespace Presentation.InformationPanel.MVC.ViewElements
         {
             for (int i = 0; i < data.Count; i++)
             {
-                AddCollectionElement(data[i]);   
+                AddCollectionElement(data[i], i);   
             }
         }
 
-        private void AddCollectionElement(DataItem dataItem)
+        private void AddCollectionElement(DataItem dataItem, int index)
         {
-            //spawn by zenject
+            InformationElement newInformationElement = _informationElementFactory.Create();
+            newInformationElement.transform.parent = _collectionElementParent;
+            newInformationElement.RefreshView(dataItem, index);
+            _informationElements.Add(newInformationElement);
         }
 
         #endregion
