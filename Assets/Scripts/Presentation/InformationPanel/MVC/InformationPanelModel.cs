@@ -43,6 +43,7 @@ namespace Presentation.InformationPanel
         
         public IList<DataItem> GetDataCurrentPage()
         {
+            //przypadek jak nie ma elementów tyle ile żądamy
             return _availableDataCollection.GetRange(_firstVisibleCollectionElementIndex, ELEMENTS_COUNT_ON_PAGE);
         }
 
