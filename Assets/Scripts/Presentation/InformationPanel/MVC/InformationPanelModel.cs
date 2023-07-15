@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Presentation.InformationPanel
 {
@@ -43,8 +44,10 @@ namespace Presentation.InformationPanel
         
         public IList<DataItem> GetDataCurrentPage()
         {
-            //przypadek jak nie ma elementów tyle ile żądamy
-            return _availableDataCollection.GetRange(_firstVisibleCollectionElementIndex, ELEMENTS_COUNT_ON_PAGE);
+            int startIndex = _firstVisibleCollectionElementIndex;
+            int count = Mathf.Min(ELEMENTS_COUNT_ON_PAGE, _availableDataCollection.Count - startIndex);
+            
+            return _availableDataCollection.GetRange(_firstVisibleCollectionElementIndex, count);
         }
 
         public void NextPage()
@@ -77,9 +80,12 @@ namespace Presentation.InformationPanel
             return (prevPageIsPossible, nextPageIsPossible);
         }
 
-        public int GetStartIndex()
+        
+        /// <summary>Returning index of first element, but order is not count from 0</summary>
+        
+        public int GetFirstElementIndexInPage()
         {
-            return _firstVisibleCollectionElementIndex;
+            return _firstVisibleCollectionElementIndex + 1;
         }
 
         #endregion

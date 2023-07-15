@@ -54,7 +54,7 @@ namespace Presentation.InformationPanel.MVC.ViewElements
         private void AddCollectionElement(DataItem dataItem, int index)
         {
             InformationElement newInformationElement = _informationElementFactory.Create();
-            newInformationElement.transform.parent = _collectionElementParent;
+            newInformationElement.transform.SetParent(_collectionElementParent);
             newInformationElement.RefreshView(dataItem, index);
             _informationElements.Add(newInformationElement);
         }
