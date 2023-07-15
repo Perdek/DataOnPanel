@@ -37,7 +37,7 @@ namespace Presentation.InformationPanel.MVC.ViewElements
 
         private void RemoveCollectionElement(int index)
         {
-            GameObject.Destroy(_informationElements[index].gameObject);
+            _informationElementPool.Despawn(_informationElements[index]);
             _informationElements.RemoveAt(index);
         }
 
