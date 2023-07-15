@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Configuration.InformationPanel;
 using Presentation.InformationPanel.MVC.ViewElements;
 using UnityEngine;
 using Zenject;

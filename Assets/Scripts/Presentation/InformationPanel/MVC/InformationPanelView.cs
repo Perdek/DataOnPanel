@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Presentation.InformationPanel.MVC.ViewElements;
 using UnityEngine;
 using UnityEngine.Events;

@@ -1,21 +1,27 @@
+using Configuration.InformationPanel;
 using UnityEngine;
 using Zenject;
 
-[CreateAssetMenu(fileName = "InformationPanelConfigurationInstaller", menuName = "Installers/InformationPanelConfigurationInstaller")]
-public class InformationPanelConfigurationInstaller : ScriptableObjectInstaller<InformationPanelConfigurationInstaller>
+namespace Installers
 {
-    #region MEMBERS
-
-    [SerializeField] private InformationPanelConfiguration _informationPanelConfiguration;
-
-    #endregion
-
-    #region METHODS
-
-    public override void InstallBindings()
+    [CreateAssetMenu(fileName = "InformationPanelConfigurationInstaller",
+        menuName = "Installers/InformationPanelConfigurationInstaller")]
+    public class
+        InformationPanelConfigurationInstaller : ScriptableObjectInstaller<InformationPanelConfigurationInstaller>
     {
-        Container.BindInstance(_informationPanelConfiguration);
-    }
+        #region MEMBERS
 
-    #endregion
+        [SerializeField] private InformationPanelConfiguration _informationPanelConfiguration;
+
+        #endregion
+
+        #region METHODS
+
+        public override void InstallBindings()
+        {
+            Container.BindInstance(_informationPanelConfiguration);
+        }
+
+        #endregion
+    }
 }

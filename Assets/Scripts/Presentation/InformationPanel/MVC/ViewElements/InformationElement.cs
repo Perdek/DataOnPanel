@@ -1,4 +1,4 @@
-using System;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -15,8 +15,8 @@ namespace Presentation.InformationPanel.MVC.ViewElements
         
         [Space]
         [SerializeField] private GameObject _glowEffectImage;
-        [SerializeField] private TMPro.TMP_Text _indexText;
-        [SerializeField] private TMPro.TMP_Text _nameText;
+        [SerializeField] private TMP_Text _indexText;
+        [SerializeField] private TMP_Text _nameText;
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace Presentation.InformationPanel.MVC.ViewElements
 
         #endregion
 
-        #region FACTORY
+        #region POOL
 
         public class Pool : MonoMemoryPool<InformationElement>
         {

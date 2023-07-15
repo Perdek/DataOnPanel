@@ -9,8 +9,6 @@ namespace Presentation.InformationPanel.MVC.ViewElements
     {
         #region MEMBERS
 
-        [SerializeField] private Transform _collectionElementParent;
-
         private List<InformationElement> _informationElements = new List<InformationElement>();
         private InformationElement.Pool _informationElementPool;
 
@@ -54,7 +52,6 @@ namespace Presentation.InformationPanel.MVC.ViewElements
         private void AddCollectionElement(DataItem dataItem, int index)
         {
             InformationElement newInformationElement = _informationElementPool.Spawn();
-            newInformationElement.transform.SetParent(_collectionElementParent);
             newInformationElement.RefreshView(dataItem, index);
             _informationElements.Add(newInformationElement);
         }

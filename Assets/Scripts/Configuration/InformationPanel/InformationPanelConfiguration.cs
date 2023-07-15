@@ -1,17 +1,21 @@
 using UnityEngine;
 
-[System.Serializable]
-public class InformationPanelConfiguration
+namespace Configuration.InformationPanel
 {
-    #region MEMBERS
+    [System.Serializable]
 
-    [SerializeField] private int _maxElementCount = 5;
+    public class InformationPanelConfiguration
+    {
+        #region MEMBERS
 
-    #endregion
+        [SerializeField] private int _maxElementCount = 5;
 
-    #region PROPERTIES
+        #endregion
 
-    public int MaxElementCount => _maxElementCount;
+        #region PROPERTIES
 
-    #endregion
+        public int MaxElementCount => _maxElementCount;
+
+        #endregion
+    }
 }
