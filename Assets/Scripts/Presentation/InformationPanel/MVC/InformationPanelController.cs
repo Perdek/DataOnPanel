@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Configuration.InformationPanel;
@@ -15,8 +16,8 @@ namespace Presentation.InformationPanel
         [SerializeField] private InformationPanelView _view;
         [SerializeField] private InformationPanelModel _model;
 
-        private CancellationToken _cancellationTokenForDataCountRequest;
-        private CancellationToken _cancellationTokenForDataRequest;
+        private CancellationTokenSource _cancellationTokenForDataCountRequest;
+        private CancellationTokenSource _cancellationTokenForDataRequest;
 
         #endregion
 
@@ -33,6 +34,12 @@ namespace Presentation.InformationPanel
             RefreshPageView();
         }
 
+        private void OnDestroy()
+        {
+            _cancellationTokenForDataCountRequest.Cancel();
+            _cancellationTokenForDataRequest.Cancel();
+        }
+
         #endregion
 
         #region METHODS
@@ -46,8 +53,8 @@ namespace Presentation.InformationPanel
 
         private void Initialize()
         {
-            _cancellationTokenForDataCountRequest = new CancellationToken();
-            _cancellationTokenForDataRequest = new CancellationToken();
+            _cancellationTokenForDataCountRequest = new CancellationTokenSource();
+            _cancellationTokenForDataRequest = new CancellationTokenSource();
             _view.Initialize();
 
             _view.RefreshStartUpView();
@@ -70,8 +77,8 @@ namespace Presentation.InformationPanel
 
         private async Task RefreshModel()
         {
-            await _model.RefreshDataAvailableCount(_cancellationTokenForDataCountRequest);
-            await _model.RequestData(_cancellationTokenForDataRequest);
+            await _model.RefreshDataAvailableCount(_cancellationTokenForDataCountRequest.Token);
+            await _model.RequestData(_cancellationTokenForDataRequest.Token);
         }
 
         private void RefreshPageView()

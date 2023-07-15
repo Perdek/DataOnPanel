@@ -33,15 +33,32 @@ namespace Presentation.InformationPanel
 
         public async Task RequestData(CancellationToken cancellationToken)
         {
-            //prepare for cancellation token
-            var requestedData = await _dataServer.RequestData(_pageIndex, _availableDataCount, cancellationToken);
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            _availableDataCollection = requestedData.ToList();
+                var requestedData = await _dataServer.RequestData(_pageIndex, _availableDataCount, cancellationToken);
+
+                _availableDataCollection = requestedData.ToList();
+            }
+            catch (OperationCanceledException exception)
+            {
+                Debug.LogError(exception);
+            }
         }
 
         public async Task RefreshDataAvailableCount(CancellationToken cancellationToken)
         {
-            _availableDataCount = await _dataServer.DataAvailable(cancellationToken);
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                
+                _availableDataCount = await _dataServer.DataAvailable(cancellationToken);
+            }
+            catch (OperationCanceledException exception)
+            {
+                Debug.LogError(exception);
+            }
         }
         
         public IList<DataItem> GetDataCurrentPage()
