@@ -69,7 +69,7 @@ namespace Presentation.InformationPanel.MVC.ViewElements
 
         #region FACTORY
 
-        public class Factory : PlaceholderFactory<InformationElement>
+        public class Pool : MonoMemoryPool<InformationElement>
         {
             
         }

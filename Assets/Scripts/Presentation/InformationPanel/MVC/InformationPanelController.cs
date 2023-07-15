@@ -37,10 +37,10 @@ namespace Presentation.InformationPanel
         #region METHODS
         
         [Inject]
-        private void InjectDependencies(IDataServer dataServer, InformationElement.Factory informationElementFactory)
+        private void InjectDependencies(IDataServer dataServer, InformationElement.Pool informationElementPool, InformationPanelConfiguration informationPanelConfiguration)
         {
-            _model.InjectDependencies(dataServer);
-            _view.InjectDependencies(informationElementFactory);
+            _model.InjectDependencies(dataServer, informationPanelConfiguration);
+            _view.InjectDependencies(informationElementPool);
         }
 
         private void Initialize()

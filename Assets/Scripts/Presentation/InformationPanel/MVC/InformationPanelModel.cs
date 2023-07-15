@@ -13,20 +13,21 @@ namespace Presentation.InformationPanel
         #region MEMBERS
 
         private IDataServer _dataServer;
+        private InformationPanelConfiguration _informationPanelConfiguration;
+        
         private List<DataItem> _availableDataCollection = new List<DataItem>();
         private int _availableDataCount;
         private int _pageIndex;
         private int _firstVisibleCollectionElementIndex;
-        
-        private const int ELEMENTS_COUNT_ON_PAGE = 5;
 
         #endregion
 
         #region METHODS
         
-        public void InjectDependencies(IDataServer dataServer)
+        public void InjectDependencies(IDataServer dataServer, InformationPanelConfiguration informationPanelConfiguration)
         {
             _dataServer = dataServer;
+            _informationPanelConfiguration = informationPanelConfiguration;
         }
 
         public async Task RequestData(CancellationToken cancellationToken)
@@ -45,20 +46,20 @@ namespace Presentation.InformationPanel
         public IList<DataItem> GetDataCurrentPage()
         {
             int startIndex = _firstVisibleCollectionElementIndex;
-            int count = Mathf.Min(ELEMENTS_COUNT_ON_PAGE, _availableDataCollection.Count - startIndex);
+            int count = Mathf.Min(_informationPanelConfiguration.MaxElementCount, _availableDataCollection.Count - startIndex);
             
             return _availableDataCollection.GetRange(_firstVisibleCollectionElementIndex, count);
         }
 
         public void NextPage()
         {
-            if ((_pageIndex + 1) * ELEMENTS_COUNT_ON_PAGE > _availableDataCount)
+            if ((_pageIndex + 1) * _informationPanelConfiguration.MaxElementCount > _availableDataCount)
             {
                 return;
             }
             
             _pageIndex++;
-            _firstVisibleCollectionElementIndex += ELEMENTS_COUNT_ON_PAGE;
+            _firstVisibleCollectionElementIndex += _informationPanelConfiguration.MaxElementCount;
         }
 
         public void PrevPage()
@@ -69,12 +70,12 @@ namespace Presentation.InformationPanel
             }
             
             _pageIndex--;
-            _firstVisibleCollectionElementIndex -= ELEMENTS_COUNT_ON_PAGE;
+            _firstVisibleCollectionElementIndex -= _informationPanelConfiguration.MaxElementCount;
         }
 
         public (bool prevPageIsPossible, bool nextPageIsPossible) ChangingPageIsPossible()
         {
-            bool nextPageIsPossible = (_pageIndex + 1) * ELEMENTS_COUNT_ON_PAGE < _availableDataCount;
+            bool nextPageIsPossible = (_pageIndex + 1) * _informationPanelConfiguration.MaxElementCount < _availableDataCount;
             bool prevPageIsPossible = _pageIndex > 0;
 
             return (prevPageIsPossible, nextPageIsPossible);

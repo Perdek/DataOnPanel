@@ -25,9 +25,9 @@ namespace Presentation.InformationPanel
         
         #region METHODS
 
-        public void InjectDependencies(InformationElement.Factory informationElementFactory)
+        public void InjectDependencies(InformationElement.Pool informationElementPool)
         {
-            _collectionPanel.InjectDependencies(informationElementFactory);
+            _collectionPanel.InjectDependencies(informationElementPool);
         }
 
         public void Initialize()

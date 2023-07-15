@@ -12,15 +12,15 @@ namespace Presentation.InformationPanel.MVC.ViewElements
         [SerializeField] private Transform _collectionElementParent;
 
         private List<InformationElement> _informationElements = new List<InformationElement>();
-        private InformationElement.Factory _informationElementFactory;
+        private InformationElement.Pool _informationElementPool;
 
         #endregion
 
         #region METHODS
 
-        public void InjectDependencies(InformationElement.Factory informationElementFactory)
+        public void InjectDependencies(InformationElement.Pool informationElementPool)
         {
-            _informationElementFactory = informationElementFactory;
+            _informationElementPool = informationElementPool;
         }
 
         public void Refresh(IList<DataItem> data, int startIndex)
@@ -53,7 +53,7 @@ namespace Presentation.InformationPanel.MVC.ViewElements
 
         private void AddCollectionElement(DataItem dataItem, int index)
         {
-            InformationElement newInformationElement = _informationElementFactory.Create();
+            InformationElement newInformationElement = _informationElementPool.Spawn();
             newInformationElement.transform.SetParent(_collectionElementParent);
             newInformationElement.RefreshView(dataItem, index);
             _informationElements.Add(newInformationElement);
