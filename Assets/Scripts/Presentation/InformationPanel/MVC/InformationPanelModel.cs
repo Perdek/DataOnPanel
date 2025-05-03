@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 using Configuration.InformationPanel;
 using UnityEngine;
 
-namespace Presentation.InformationPanel
+namespace Presentation.InformationPanel.MVC
 {
-    [Serializable]
     public class InformationPanelModel
     {
         #region MEMBERS
 
-        private IDataServer _dataServer;
-        private InformationPanelConfiguration _informationPanelConfiguration;
-        
-        private List<DataItem> _availableDataCollection = new List<DataItem>();
+        private readonly IDataServer _dataServer;
+        private readonly InformationPanelConfiguration _informationPanelConfiguration;
+
+        private List<DataItem> _availableDataCollection = new();
         private int _availableDataCount;
         private int _pageIndex;
         private int _firstVisibleCollectionElementIndex;
@@ -24,8 +23,8 @@ namespace Presentation.InformationPanel
         #endregion
 
         #region METHODS
-        
-        public void InjectDependencies(IDataServer dataServer, InformationPanelConfiguration informationPanelConfiguration)
+
+        public InformationPanelModel(IDataServer dataServer, InformationPanelConfiguration informationPanelConfiguration)
         {
             _dataServer = dataServer;
             _informationPanelConfiguration = informationPanelConfiguration;
@@ -37,7 +36,7 @@ namespace Presentation.InformationPanel
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var requestedData = await _dataServer.RequestData(_pageIndex, _availableDataCount, cancellationToken);
+                IList<DataItem> requestedData = await _dataServer.RequestData(_pageIndex, _availableDataCount, cancellationToken);
 
                 _availableDataCollection = requestedData.ToList();
             }
@@ -52,7 +51,7 @@ namespace Presentation.InformationPanel
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                
+
                 _availableDataCount = await _dataServer.DataAvailable(cancellationToken);
             }
             catch (OperationCanceledException exception)
@@ -60,12 +59,12 @@ namespace Presentation.InformationPanel
                 Debug.LogError(exception);
             }
         }
-        
+
         public IList<DataItem> GetDataCurrentPage()
         {
             int startIndex = _firstVisibleCollectionElementIndex;
             int count = Mathf.Min(_informationPanelConfiguration.MaxElementCount, _availableDataCollection.Count - startIndex);
-            
+
             return _availableDataCollection.GetRange(_firstVisibleCollectionElementIndex, count);
         }
 
@@ -75,7 +74,7 @@ namespace Presentation.InformationPanel
             {
                 return;
             }
-            
+
             _pageIndex++;
             _firstVisibleCollectionElementIndex += _informationPanelConfiguration.MaxElementCount;
         }
@@ -86,7 +85,7 @@ namespace Presentation.InformationPanel
             {
                 return;
             }
-            
+
             _pageIndex--;
             _firstVisibleCollectionElementIndex -= _informationPanelConfiguration.MaxElementCount;
         }
@@ -99,9 +98,9 @@ namespace Presentation.InformationPanel
             return (prevPageIsPossible, nextPageIsPossible);
         }
 
-        
+
         /// <summary>Returning index of first element, but order is not count from 0</summary>
-        
+
         public int GetFirstElementIndexInPage()
         {
             return _firstVisibleCollectionElementIndex + 1;

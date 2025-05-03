@@ -1,40 +1,40 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Configuration.InformationPanel;
-using Presentation.InformationPanel.MVC.ViewElements;
-using UnityEngine;
 using Zenject;
 
-namespace Presentation.InformationPanel
+namespace Presentation.InformationPanel.MVC
 {
-    [System.Serializable]
-    public class InformationPanelController : MonoBehaviour
+    [Serializable]
+    public class InformationPanelController : IInitializable, IDisposable
     {
         #region MEMBERS
 
-        [SerializeField] private InformationPanelView _view;
-        [SerializeField] private InformationPanelModel _model;
+        private InformationPanelView _view;
+        private InformationPanelModel _model;
 
         private CancellationTokenSource _cancellationTokenForDataCountRequest;
         private CancellationTokenSource _cancellationTokenForDataRequest;
 
         #endregion
 
-        #region UNITY_METHODS
+        #region ZENJECT_METHODS
 
-        private void Awake()
+        public void Initialize()
         {
-            Initialize();
+            _cancellationTokenForDataCountRequest = new CancellationTokenSource();
+            _cancellationTokenForDataRequest = new CancellationTokenSource();
+
+            _view.Initialize();
+            _view.RefreshStartUpView();
+
+            _view.AddListenerToNextButton(NextPage);
+            _view.AddListenerToPreviousButton(PrevPage);
+
+            RefreshData().ConfigureAwait(false);
         }
 
-        private async void Start()
-        {
-            await RefreshModel();
-            RefreshPageView();
-        }
-
-        private void OnDestroy()
+        public void Dispose()
         {
             _cancellationTokenForDataCountRequest.Cancel();
             _cancellationTokenForDataRequest.Cancel();
@@ -43,24 +43,11 @@ namespace Presentation.InformationPanel
         #endregion
 
         #region METHODS
-        
-        [Inject]
-        private void InjectDependencies(IDataServer dataServer, InformationElement.Pool informationElementPool, InformationPanelConfiguration informationPanelConfiguration)
-        {
-            _model.InjectDependencies(dataServer, informationPanelConfiguration);
-            _view.InjectDependencies(informationElementPool);
-        }
 
-        private void Initialize()
+        private InformationPanelController(InformationPanelView view, InformationPanelModel model)
         {
-            _cancellationTokenForDataCountRequest = new CancellationTokenSource();
-            _cancellationTokenForDataRequest = new CancellationTokenSource();
-            _view.Initialize();
-
-            _view.RefreshStartUpView();
-            
-            _view.AddListenerToNextButton(NextPage);
-            _view.AddListenerToPreviousButton(PrevPage);
+            _view = view;
+            _model = model;
         }
 
         private void NextPage()
@@ -75,10 +62,12 @@ namespace Presentation.InformationPanel
             RefreshPageView();
         }
 
-        private async Task RefreshModel()
+        private async Task RefreshData()
         {
             await _model.RefreshDataAvailableCount(_cancellationTokenForDataCountRequest.Token);
             await _model.RequestData(_cancellationTokenForDataRequest.Token);
+
+            RefreshPageView();
         }
 
         private void RefreshPageView()

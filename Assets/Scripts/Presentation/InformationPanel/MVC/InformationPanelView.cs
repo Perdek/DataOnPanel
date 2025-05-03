@@ -4,12 +4,13 @@ using Presentation.InformationPanel.MVC.ViewElements;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Zenject;
 
-namespace Presentation.InformationPanel
+namespace Presentation.InformationPanel.MVC
 {
     [Serializable]
 
-    public class InformationPanelView
+    public class InformationPanelView : MonoBehaviour
     {
         #region MEMBERS
 
@@ -21,9 +22,10 @@ namespace Presentation.InformationPanel
         [SerializeField] private CollectionPanel _collectionPanel;
 
         #endregion
-        
+
         #region METHODS
 
+        [Inject]
         public void InjectDependencies(InformationElement.Pool informationElementPool)
         {
             _collectionPanel.InjectDependencies(informationElementPool);
@@ -31,7 +33,7 @@ namespace Presentation.InformationPanel
 
         public void Initialize()
         {
-            InitializeLoadingAnimation();
+            _loadingPanel.InitializeRotationAnimation();
         }
 
         public void AddListenerToPreviousButton(UnityAction onClick)
@@ -43,7 +45,7 @@ namespace Presentation.InformationPanel
         {
             _nextButton.onClick.AddListener(onClick);
         }
-        
+
         public void RefreshViewOnLoadedData(IList<DataItem> data, int startIndex)
         {
             _loadingPanel.TurnOffLoadingAnimation();
@@ -57,16 +59,11 @@ namespace Presentation.InformationPanel
             _nextButton.interactable = false;
             _previousButton.interactable = false;
         }
-        
+
         public void RefreshButtons((bool prevPageIsPossible, bool nextPageIsPossible) changingPageIsPossible)
         {
             _nextButton.interactable = changingPageIsPossible.nextPageIsPossible;
             _previousButton.interactable = changingPageIsPossible.prevPageIsPossible;
-        }
-
-        private void InitializeLoadingAnimation()
-        {
-            _loadingPanel.InitializeRotationAnimation();
         }
 
         #endregion

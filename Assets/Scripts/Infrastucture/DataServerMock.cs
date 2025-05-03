@@ -6,9 +6,9 @@ using Random = System.Random;
 
 public class DataServerMock : IDataServer
 {
-	private readonly Random _random = new Random();
+	private readonly Random _random = new();
 
-	private readonly List<DataItem> _items = new List<DataItem>(128);
+	private readonly List<DataItem> _items = new(128);
 
 	private readonly int _delayMin;
 	private readonly int _delayMax;
@@ -33,7 +33,7 @@ public class DataServerMock : IDataServer
 		for (int i = 0; i < count; i++)
 		{
 			AddDataItem();
-		}	
+		}
 	}
 
 	public async Task<int> DataAvailable(CancellationToken ct)
@@ -61,7 +61,7 @@ public class DataServerMock : IDataServer
 			sb.Append(_names[_random.Next(_names.Length)]);
 			sb.Append(" ");
 		}
-		
+
 		_items.Add(new DataItem(category, sb.ToString(), special));
 	}
 }

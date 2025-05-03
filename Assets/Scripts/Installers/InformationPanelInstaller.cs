@@ -1,3 +1,4 @@
+using Presentation.InformationPanel.MVC;
 using Presentation.InformationPanel.MVC.ViewElements;
 using UnityEngine;
 using Zenject;
@@ -10,6 +11,7 @@ namespace Installers
 
         [SerializeField] private InformationElement _informationElementPrefab;
         [SerializeField] private Transform _informationElementsParent;
+        [SerializeField] private InformationPanelView _informationPanelView;
 
         #endregion
 
@@ -17,8 +19,9 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            Container.BindMemoryPool<InformationElement, InformationElement.Pool>()
-                .FromComponentInNewPrefab(_informationElementPrefab).UnderTransform(_informationElementsParent);
+            Container.BindInterfacesAndSelfTo<InformationPanelController>().AsSingle().WithArguments(_informationPanelView);
+            Container.BindMemoryPool<InformationElement, InformationElement.Pool>().FromComponentInNewPrefab(_informationElementPrefab).UnderTransform(_informationElementsParent);
+            Container.Bind<InformationPanelModel>().AsSingle();
         }
 
         #endregion
