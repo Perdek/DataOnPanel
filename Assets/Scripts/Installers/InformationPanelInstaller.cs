@@ -22,6 +22,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<InformationPanelController>().AsSingle().WithArguments(_informationPanelView);
             Container.BindMemoryPool<InformationElement, InformationElement.Pool>().FromComponentInNewPrefab(_informationElementPrefab).UnderTransform(_informationElementsParent);
             Container.Bind<InformationPanelModel>().AsSingle();
+            Container.Bind<CollectionPanel>().AsTransient();
         }
 
         #endregion

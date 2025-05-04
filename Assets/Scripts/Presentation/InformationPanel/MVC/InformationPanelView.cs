@@ -19,16 +19,16 @@ namespace Presentation.InformationPanel.MVC
         [SerializeField] private Button _nextButton;
 
         [SerializeField] private LoadingPanel _loadingPanel;
-        [SerializeField] private CollectionPanel _collectionPanel;
+        private CollectionPanel _collectionPanel;
 
         #endregion
 
         #region METHODS
 
         [Inject]
-        public void InjectDependencies(InformationElement.Pool informationElementPool)
+        public void InjectDependencies(CollectionPanel collectionPanel)
         {
-            _collectionPanel.InjectDependencies(informationElementPool);
+            _collectionPanel = collectionPanel;
         }
 
         public void Initialize()

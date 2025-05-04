@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
+using UnityEngine;
+using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Presentation.InformationPanel.MVC
@@ -31,20 +32,27 @@ namespace Presentation.InformationPanel.MVC
             _view.AddListenerToNextButton(NextPage);
             _view.AddListenerToPreviousButton(PrevPage);
 
-            RefreshData().ConfigureAwait(false);
+            RefreshData().ContinueWith(RefreshPageView).Forget(Debug.LogException);
         }
 
         public void Dispose()
         {
-            _cancellationTokenForDataCountRequest.Cancel();
-            _cancellationTokenForDataRequest.Cancel();
+            if (!_cancellationTokenForDataCountRequest.IsCancellationRequested)
+            {
+                _cancellationTokenForDataCountRequest.Cancel();
+            }
+
+            if (!_cancellationTokenForDataRequest.IsCancellationRequested)
+            {
+                _cancellationTokenForDataRequest.Cancel();
+            }
         }
 
         #endregion
 
         #region METHODS
 
-        private InformationPanelController(InformationPanelView view, InformationPanelModel model)
+        public InformationPanelController(InformationPanelView view, InformationPanelModel model)
         {
             _view = view;
             _model = model;
@@ -62,12 +70,10 @@ namespace Presentation.InformationPanel.MVC
             RefreshPageView();
         }
 
-        private async Task RefreshData()
+        private async UniTask RefreshData()
         {
             await _model.RefreshDataAvailableCount(_cancellationTokenForDataCountRequest.Token);
             await _model.RequestData(_cancellationTokenForDataRequest.Token);
-
-            RefreshPageView();
         }
 
         private void RefreshPageView()
